@@ -14,48 +14,27 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl() throws SQLException, ClassNotFoundException {
     }
 
-    public void createUsersTable() {
-
-        try {
-            userDao.createUsersTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void createUsersTable() throws SQLException {
+        userDao.createUsersTable();
     }
 
-    public void dropUsersTable() {
-        try {
-            userDao.dropUsersTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void dropUsersTable() throws SQLException {
+        userDao.dropUsersTable();
     }
 
-    public void saveUser(String name, String lastName, byte age) {
-        try {
-            userDao.saveUser(name, lastName, age);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void saveUser(String name, String lastName, byte age) throws SQLException, ClassNotFoundException {
+        userDao.saveUser(name, lastName, age);
     }
 
-    public void removeUserById(long id) {
-        try {
-            userDao.removeUserById(id);
-        } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    public void removeUserById(long id) throws SQLException, ClassNotFoundException {
+        userDao.removeUserById(id);
     }
 
     public List<User> getAllUsers() throws SQLException {
         return userDao.getAllUsers();
     }
 
-    public void cleanUsersTable() {
-        try {
-            userDao.cleanUsersTable();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void cleanUsersTable() throws SQLException {
+        userDao.cleanUsersTable();
     }
 }

@@ -11,13 +11,17 @@ public class Main {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         UserService userService = new UserServiceImpl();
-        userService.dropUsersTable();
+
         userService.createUsersTable();
         userService.saveUser("Ivan", "Ivanov", (byte) 42);
+        userService.saveUser("Stepan", "Stepanov", (byte) 32);
+        userService.saveUser("Petr", "Petrov", (byte) 40);
+        userService.saveUser("Jon", "BonJovi", (byte) 55);
+        System.out.println(userService.getAllUsers());
+        //userService.removeUserById(1L);
         userService.cleanUsersTable();
-        userService.saveUser("Ivan", "Ivanov", (byte) 42);
-        userService.removeUserById(1L);
-        userService.saveUser("Ivan", "Ivanov", (byte) 42);
-        userService.getAllUsers();
+        userService.dropUsersTable();
+
+
     }
 }

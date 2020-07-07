@@ -5,9 +5,9 @@ import java.util.Enumeration;
 
 public class Util {
 
-    public static Connection util() throws SQLException, ClassNotFoundException {
+    public static Connection getConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/db?user=root&password=" +
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/userdb?user=root&password=" +
                 "root&useLegacyDatetimeCode=false&serverTimezone=UTC");
     }
 }
