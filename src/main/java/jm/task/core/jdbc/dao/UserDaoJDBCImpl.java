@@ -3,7 +3,6 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import javax.jws.soap.SOAPBinding;
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,31 +11,30 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private final Statement statement = Util.getConnection().createStatement();
     private Connection connection;
 
     public UserDaoJDBCImpl() throws SQLException, ClassNotFoundException {
         connection  = Util.getConnection();
     }
 
-    public void createUsersTable() throws SQLException {
+    public void createUsersTable(){
         try {
-            statement.executeUpdate("CREATE TABLE users (id int, name varchar (64), lastname varchar (64), " +
+            connection.createStatement().executeUpdate("CREATE TABLE users (id int, name varchar (64), lastname varchar (64), " +
                     "age int (3))");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void dropUsersTable() throws SQLException {
+    public void dropUsersTable() {
         try {
-            statement.executeUpdate("DROP TABLE users");
+            connection.createStatement().executeUpdate("DROP TABLE users");
         } catch (SQLException e) {
-            System.out.println("Таблица не существует");
+            e.printStackTrace();
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) throws SQLException, ClassNotFoundException {
+    public void saveUser(String name, String lastName, byte age) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users " +
                     "(id, name, lastname, age) VALUE (?, ?, ?, ?)");
@@ -51,7 +49,7 @@ public class UserDaoJDBCImpl implements UserDao {
         System.out.println("User с именем " + name + " добавлен в базу данных");
     }
 
-    public void removeUserById(long id) throws SQLException, ClassNotFoundException {
+    public void removeUserById(long id) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users where id = ?");
             preparedStatement.setLong(1, id);
@@ -61,10 +59,10 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
         try {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
+            ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM users");
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
@@ -79,9 +77,9 @@ public class UserDaoJDBCImpl implements UserDao {
         return list;
     }
 
-    public void cleanUsersTable() throws SQLException {
+    public void cleanUsersTable() {
         try {
-            statement.executeUpdate("DELETE FROM users");
+            connection.createStatement().executeUpdate("DELETE FROM users");
         } catch (SQLException e) {
             e.printStackTrace();
         }
