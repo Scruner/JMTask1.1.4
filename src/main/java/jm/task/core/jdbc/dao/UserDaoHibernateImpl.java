@@ -27,11 +27,14 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory
                     .openSession();
+            Transaction transaction = session.beginTransaction();
             session.createSQLQuery("CREATE TABLE users (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), lastname VARCHAR(255), age INT)")
                    .executeUpdate();
+            transaction.commit();
             session.close();
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе createUsersTable: " + e.getMessage());
+        } finally {
             session.close();
         }
     }
@@ -41,11 +44,14 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory
                     .openSession();
+            Transaction transaction = session.beginTransaction();
             session.createSQLQuery("DROP TABLE users")
                    .executeUpdate();
+            transaction.commit();
             session.close();
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе dropUsersTable: " + e.getMessage());
+        } finally {
             session.close();
         }
     }
@@ -63,6 +69,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе saveUser: " + e.getMessage());
             transaction.rollback();
+        } finally {
             session.close();
         }  /* entityManager.persist(new User(name, lastName, age));*/
     }
@@ -80,6 +87,7 @@ public class UserDaoHibernateImpl implements UserDao {
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе removeUserByID: " + e.getMessage());
             transaction.rollback();
+        } finally {
             session.close();
         }
     }
@@ -94,6 +102,8 @@ public class UserDaoHibernateImpl implements UserDao {
                           .list();//делается нужное действие (получение данных)
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе getAllUsers: " + e.getMessage());
+        } finally {
+            session.close();
         }
         return list; /* return entityManager.createQuery("Select e from " + User  e")
                          .getResultList();*/
@@ -104,11 +114,14 @@ public class UserDaoHibernateImpl implements UserDao {
         try {
             session = sessionFactory
                     .openSession();
+            Transaction transaction = session.beginTransaction();
             session.createQuery("DELETE from User")
                    .executeUpdate();
+            transaction.commit();
             session.close();
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе cleanUsersTable: " + e.getMessage());
+        } finally {
             session.close();
         }
     }
