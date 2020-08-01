@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
-    private Session session;
     private SessionFactory sessionFactory;
 
     public UserDaoHibernateImpl() {
@@ -24,16 +23,18 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
+
+        Session session = sessionFactory
+                .openSession();
+        Transaction transaction = session.beginTransaction();
         try {
-            session = sessionFactory
-                    .openSession();
-            Transaction transaction = session.beginTransaction();
             session.createSQLQuery("CREATE TABLE users (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255), lastname VARCHAR(255), age INT)")
                    .executeUpdate();
             transaction.commit();
             session.close();
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе createUsersTable: " + e.getMessage());
+            transaction.rollback();
         } finally {
             session.close();
         }
@@ -41,16 +42,18 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
+
+        Session session = sessionFactory
+                .openSession();
+        Transaction transaction = session.beginTransaction();
         try {
-            session = sessionFactory
-                    .openSession();
-            Transaction transaction = session.beginTransaction();
             session.createSQLQuery("DROP TABLE users")
                    .executeUpdate();
             transaction.commit();
             session.close();
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе dropUsersTable: " + e.getMessage());
+            transaction.rollback();
         } finally {
             session.close();
         }
@@ -58,7 +61,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        session = sessionFactory
+        Session session = sessionFactory
                 .openSession();//создается объект типа Session
         Transaction transaction = session.beginTransaction();
         try {
@@ -76,7 +79,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        session = sessionFactory
+        Session session = sessionFactory
                 .openSession();//создается объект типа Session
         Transaction transaction = session.beginTransaction();//запускается транзакция
         try {
@@ -94,7 +97,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        session = sessionFactory
+        Session session = sessionFactory
                 .openSession();//создается объект типа Session
         List<User> list = new ArrayList<>();
         try {
@@ -111,16 +114,18 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void cleanUsersTable() {
+
+        Session session = sessionFactory
+                .openSession();
+        Transaction transaction = session.beginTransaction();
         try {
-            session = sessionFactory
-                    .openSession();
-            Transaction transaction = session.beginTransaction();
             session.createQuery("DELETE from User")
                    .executeUpdate();
             transaction.commit();
             session.close();
         } catch (Exception e) {
             System.out.println("Выброшено SQL исключение в методе cleanUsersTable: " + e.getMessage());
+            transaction.rollback();
         } finally {
             session.close();
         }
